@@ -1,5 +1,5 @@
 <?php
-	define(_MAX_BOOKS_NUMBER_FOR_EACH_CATEGORY, 1000);
+	define("_MAX_BOOKS_NUMBER_FOR_EACH_CATEGORY", 1000);
 
 	/**
 	* This defines the structure of a bookshelf category.
@@ -8,10 +8,11 @@
 	* Categories are defined by folders which do not contain a file called BOOK_INFO.txt
 	* A structure of the bookshelf could be:
 	* /
-	*	Informatics/
-	*		Computer_Programming/
-	*			My_Book/
-	*				BOOK_INFO.txt
+	*	Categories/
+	*		Informatics/
+	*			Computer_Programming/
+	*				My_Book/
+	*					BOOK_INFO.txt
 	*/
 	class BookCategory
 	{
@@ -22,9 +23,17 @@
 		 * parent_category			->			BookCategory object, parent category reference
 		 *
 		 */
-		
 		function __construct($category_name, $fs_path, $parent_category)
 		{
+			/**
+			
+				TODO:
+				- Implement error handling
+			 */
+			
+			$this->error_no = 0;
+			$this->subcategories = array();
+
 			$this->category_name = "";
 			$this->setCategoryName($category_name);
 
@@ -103,9 +112,9 @@
 		 * Returns				:				Boolean, true = setted | false = error occure while setting it
 		 *
 		 */
-		public function setParentCategory($parent_category)
+		private function setParentCategory($parent_category)
 		{
-			$this->$parent_category = NULL;
+			//$this->$parent_category = NULL;
 			if (is_null($parent_category) || $parent_category instanceof BookCategory){
 				$this->parent_category = $parent_category;
 			}

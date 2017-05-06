@@ -53,7 +53,7 @@
 
 		if(($error_code >= 0) &&($error_code < count(_ERRORS_TEXTS))){
 			// #error-code-0---assuming-that-an-error-occurred
-			$github_error_url = _GITHUB_REPOSITORY_URL."#error-code-".$error_code."---".str_replace(" ", "-", _ERRORS_TEXTS[$error_code][0]);
+			$github_error_url = _GITHUB_REPOSITORY_URL."#error-code-".$error_code."---".strtolower(str_replace(" ", "-", _ERRORS_TEXTS[$error_code][0]));
 		}
 
 		return $github_error_url;

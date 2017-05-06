@@ -33,14 +33,31 @@
 													["Author1","Author2"],
 													"Journals",
 													"123456A234B234",
-													"resources/book_cover.png",
+													"resources/book_over.png",
 													"Description of the book",
 													["Contributor 1","Contributor 2"],
 													["amazon_book_link" => "www.test.etc"],
 													"Book notes",
 													["PDF" => "lol.pdf"]
 												]
-					]
+					],
+					[
+					'test_description' => 'Basic Book class object creation; Wrong cover image path',
+					'expected_return_code' => _ERROR_BOOK_COVER_DOES_NOT_EXISTS,
+					"book_object_parameters" => [
+													"Test book",
+													"Test book subt",
+													["Author1","Author2"],
+													"Journals",
+													"123456A234B234",
+													"resources/wrong_path",
+													"Description of the book",
+													["Contributor 1","Contributor 2"],
+													["amazon_book_link" => "www.test.etc"],
+													"Book notes",
+													["PDF" => "lol.pdf"]
+												]
+					]					
 				);
 
 	MB_LOG(_LOG_LEVEL_INFO, "Starting test '"._TEST_NAME."'", true);

@@ -14,7 +14,7 @@ During the loading of books a book with an empty title was found.
 ### Error code #3 - Invalid book format
 The software found a book download url which links to an undefined book format. Supported book formats are the following:  
 PDF, EPUB, ZIP/RAR/TGZ, PostScript, RTF  
-You can find an updated list at src/lib/defs.php ()
+You can find an updated list at src/lib/defs.php
 
 ### Error code #4 - Book cover does not exist on disk
 The book cover defined does not exists on disk (in future it will be possibile to retrive images from the internet and this error message will be fixed

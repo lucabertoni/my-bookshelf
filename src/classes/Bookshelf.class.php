@@ -16,6 +16,12 @@
 	class Bookshelf
 	{
 		/**
+		 * All this attributes are defined as public to avoid writing get methods for each of them and get easy access,
+		 * they are not intended to be public to change their values. Be careful
+		*/
+		public $aCategories = array();
+
+		/**
 		 *
 		 * Initializes the object
 		 *
@@ -24,7 +30,6 @@
 		 */
 		function __construct($main_bookshelf_categories_directory)
 		{
-			$this->aCategories = array();
 			$this->loadCategories($main_bookshelf_categories_directory, NULL);
 		}
 
@@ -37,6 +42,13 @@
 		 * $parent_category								->			object of type BookCategory that identifies the parent of the category currently analized. If NULL it is assumed as it is the main category currently scanned. When the method is called you have to pass NULL if you do not have a BookCategory object already initialized
 		 */
 		function loadCategories($category_directory_path, $parent_category = NULL){
+			/**
+			
+				TODO:
+				- Lol rifare, è no-sense
+			 */
+			
+
 			$category_directory_path = sanitize_directory_path($category_directory_path);
 
 			if(($directory_content = getDirectoryContent($category_directory_path))){

@@ -1,0 +1,1 @@
+for f in *_test.php ; do php "$f" ; done

@@ -134,5 +134,3 @@
 			return !(is_null($this->$parent_category));
 		}
 	}
-
-?>

@@ -1,7 +1,7 @@
 <?php
-	require 'lib/common.php';
-	require 'BookCategory.class.php';
-	require 'Book.class.php';
+	require_once 'lib/common.php';
+	require_once 'BookCategory.class.php';
+	require_once 'Book.class.php';
 
 	/**
 	* That class manages the bookshelf and it's contents.

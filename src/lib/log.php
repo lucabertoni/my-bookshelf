@@ -1,5 +1,5 @@
 <?php
-	require '../classes/Settings.class.php';
+	require_once 'common.php';
 
 	/**
 	 *
@@ -11,7 +11,7 @@
 	define('_LOG_LEVEL_WARNING', 2);
 	define('_LOG_LEVEL_ERROR', 3);
 
-	$error_types = array('INFO','DEBUG','WARNING','ERROR');
+	define('_ERROR_TYPES', array('INFO','DEBUG','WARNING','ERROR'));
 
 	/**
 	 *
@@ -22,12 +22,12 @@
 	 * 
 	 */
 	function MB_LOG($log_level, $message, $output_buffer = false){
-		if(($log_level >= count($error_types)) || empty($message)){
-			error_log($error_types[_LOG_LEVEL_ERROR]."|Invalid error type specified or log message empty",_MY_BOOKSHELF_LOG_FILE);
+		if(($log_level >= count(_ERROR_TYPES)) || empty($message)){
+			error_log(_ERROR_TYPES[_LOG_LEVEL_ERROR]."|Invalid error type specified or log message empty",_MY_BOOKSHELF_LOG_FILE);
 		}else{
 			if((($log_level == _LOG_LEVEL_DEBUG) && _DEBUG) || ($log_level != _LOG_LEVEL_DEBUG)){
-				$log_message = $error_types[$log_level]."|".$message."\n";
-				error_log($log_message,_MY_BOOKSHELF_LOG_FILE);
+				$log_message = _ERROR_TYPES[$log_level]."|".$message."\n";
+				error_log($log_message, 3, _MY_BOOKSHELF_LOG_FILE);
 
 				if($output_buffer)	print_r($log_message);
 			}

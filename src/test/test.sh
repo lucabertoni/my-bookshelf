@@ -1,1 +1,33 @@
-for f in *_test.php ; do php "$f" ; done
+#!/bin/bash
+
+log_file_path="/var/log/my-bookshelf/error.log"
+github_repo_url="https://github.com/lucabertoni/my-bookshelf"
+
+clear
+
+printf "! my-bookshelf Test script !"
+printf "\- Starting tests\nLogs can be found in $log_file_path. Please check that the user who is executing this tests has read/write permissions on that file.\n"
+
+number_of_tests=$( ls *_test.php | wc -l)
+
+number_of_executed_tests=0
+
+for test_file in $( ls *_test.php ); do
+	number_of_executed_tests=$((number_of_executed_tests+1))
+
+    printf "Running test "\'$test_file\'" ($number_of_executed_tests/$number_of_tests)\n\n"
+	
+	number_of_executed_tests=$((number_of_executed_tests-1))
+
+    php $test_file
+
+    rc=$?
+    if [[ rc -ne 0 ]]; then
+    	printf "Error occurred while testing $test_file. Error code: $rc. Check documentation at $github_repo_url#error-codes\n"
+    	break
+    fi
+    
+	number_of_executed_tests=$((number_of_executed_tests+1))
+done
+
+printf "I'm done.\nTotal number of tests: $number_of_tests\nNumber of succesfully executed tests: $number_of_executed_tests\n"

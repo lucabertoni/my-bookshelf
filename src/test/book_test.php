@@ -33,7 +33,7 @@
 													["Author1","Author2"],
 													"Journals",
 													"123456A234B234",
-													"resources/book_over.png",
+													"resources/book_cover.png",
 													"Description of the book",
 													["Contributor 1","Contributor 2"],
 													["amazon_book_link" => "www.test.etc"],

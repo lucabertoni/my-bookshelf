@@ -38,10 +38,10 @@
 		public $book_code = "";
 		public $book_cover_path = "";
 		public $book_description = "";
-		public $book_contributors = array();
-		public $book_additional_info = /*assoc*/array();
+		public $book_contributors = NULL;
+		public $book_additional_info = NULL;
 		public $book_notes = "";
-		public $book_resources = /*assoc*/array('PDF' => '', 'EPUB' => '', 'ZIP' => '','RAR' => '','TGZ' => '', 'PostScript' => '', 'RTF' => '');
+		public $book_resources = NULL;
 
 		private $error_no = _ERROR_NO_ERROR;
 

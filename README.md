@@ -19,5 +19,12 @@ You can find an updated list at src/lib/defs.php
 ### Error code #4 - Book cover does not exist on disk
 The book cover defined does not exists on disk (in future it will be possibile to retrive images from the internet and this error message will be fixed
 
+
+### Error code #5 Maximum number of authors for a book reached
+Too much authors for the book were specified so an error is raised. A book can have a max number of authors of 20. That is made to avoid eating all memory when we have a lot of books with a lot of authors. This is treated as a warning and not an error. A number of 20 authors is loaded, all the others are rejected
+
+### Error code #6 Incorrect parameter type
+That's a code level error. A parameter with a wrong type was passed to a method or a function. See the error you get in log for more details
+
 ## TODO
 - Give the possibility to retrive book cover images from the internet

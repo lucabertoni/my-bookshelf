@@ -1,5 +1,11 @@
 <?php
+	require_once 'BookAuthors.class.php';
+	require_once 'BookContributors.class.php';
+	require_once 'BookAdditionalInfo.class.php';
+	require_once 'BookResources.class.php';
+	
 	require_once '../lib/errors.php';
+	require_once '../lib/defs.php';
 	
 	/**
 	 *
@@ -27,7 +33,7 @@
 		*/
 		public $book_title = "";
 		public $book_subtitle = "";
-		public $book_authors = "";
+		public $book_authors = NULL;
 		public $book_genre = "";
 		public $book_code = "";
 		public $book_cover_path = "";
@@ -35,7 +41,7 @@
 		public $book_contributors = array();
 		public $book_additional_info = /*assoc*/array();
 		public $book_notes = "";
-		public $book_resource_urls = /*assoc*/array('PDF' => '', 'EPUB' => '', 'ZIP' => '','RAR' => '','TGZ' => '', 'PostScript' => '', 'RTF' => '');
+		public $book_resources = /*assoc*/array('PDF' => '', 'EPUB' => '', 'ZIP' => '','RAR' => '','TGZ' => '', 'PostScript' => '', 'RTF' => '');
 
 		private $error_no = _ERROR_NO_ERROR;
 
@@ -45,25 +51,28 @@
 		 * It doesn't check for security falls in book info like XSS and so on because there is no time to think about the problem of parsing a file created by an administrator to find something strange, tough the file was modified by an hacker who gained control of the machine
 		 * book_title				->				string, title of the book
 		 * book_subtitle			->				string, subtitle of the book
-		 * book_authors				->				array, list of authors names
+		 * book_authors				->				BookAuthors object, object containing book authors
 		 * book_genre				->				string, book genre
 		 * book_code				->				string, book code, like ISBN and so on
 		 * book_cover_path			->				string, path on the filesystem of the book cover path.
 		 * book_description			->				string, description of the book
-		 * book_contributors		->				array, list of book contributors except its authors
+		 * book_contributors		->				BookContributors object, list of book contributors except its authors
 		 * book_additional_info		->				assocarray, list of additional book info, like:
 		 												["amazon_link"] => "www.amazon.etcetc"
 		 * book_notes				->				string, notes about the book, they could be anything else that is not 
 		 											already been written down. For additional book info use book_additional_info above
-		 * book_resource_urls		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
+		 * book_resources		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
 		 */
-		function __construct($book_title, $book_subtitle, $book_authors, $book_genre, $book_code, $book_cover_path, $book_description, $book_contributors, $book_additional_info, $book_notes, $book_resource_urls)
+		function __construct($book_title, $book_subtitle, $book_authors, $book_genre, $book_code, $book_cover_path, $book_description, $book_contributors, $book_additional_info, $book_notes, $book_resources)
 		{
-			$error_code = $this->check_book_info($book_title, $book_resource_urls, $book_cover_path);
+			$error_code = $this->check_book_info($book_title, $book_resources, $book_cover_path, $book_authors,$book_contributors,$book_additional_info);
 
-			if($error_code != _ERROR_NO_ERROR){
+			if(($error_code != _ERROR_NO_ERROR)){
 				$this->error_no = $error_code;
-				return;
+
+				if(($error_code != _ERROR_MAX_NUMBER_OF_AUTHORS_REACHED) && ($error_code != _ERROR_MAX_NUMBER_OF_CONTRIBUTORS_REACHED) &&
+					($error_code != _ERROR_MAX_NUMBER_OF_ADDITIONAL_INFO_REACHED))
+					return;
 			}
 
 			$this->book_title = trim($book_title);
@@ -84,14 +93,14 @@
 		 * Some book info are scanned and an appropriate error code is returned if something wrong is detected.
 		 *
 		 * book_title				->				string, title of the book
-		 * book_resource_urls		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
+		 * book_resources		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
 		 * Return					->				int, > 0 = An error occurred | <= 0 = No error occurred
 		 */
-		public static function check_book_info($book_title, $book_resource_urls, $book_cover_path)
+		public static function check_book_info($book_title, $book_resources, $book_cover_path, $book_authors, $book_contributors,$book_additional_info)
 		{
 			if (empty($book_title)) return _ERROR_EMPTY_BOOK_TITLE;
 
-			foreach ($book_resource_urls as $key => $value) {
+			foreach ($book_resources as $key => $value) {
 				if(!(in_array($key, _BOOK_FILE_FORMATS_SUPPORTED))) return _ERROR_INVALID_BOOK_FORMAT;
 			}
 
@@ -102,6 +111,30 @@
 			 */
 			if(!file_exists(realpath($book_cover_path))) return _ERROR_BOOK_COVER_DOES_NOT_EXISTS;
 
+			/* Checking for book authors */
+			if(!($book_authors instanceof BookAuthors)) return _ERROR_INCORRECT_PARAMETER_TYPE;
+
+			$book_authors_error_no = $book_authors->getErrorNo();
+			if($book_authors_error_no != _ERROR_NO_ERROR) return $book_authors_error_no;
+
+			/* Checking for book contributors */
+			if(!($book_contributors instanceof BookContributors)) return _ERROR_INCORRECT_PARAMETER_TYPE;
+
+			$book_contributors_error_no = $book_contributors->getErrorNo();
+			if($book_contributors_error_no != _ERROR_NO_ERROR) return $book_contributors_error_no;
+
+			/* Checking for book additional_info */
+			if(!($book_additional_info instanceof BookAdditionalInfo)) return _ERROR_INCORRECT_PARAMETER_TYPE;
+
+			$book_additional_info_error_no = $book_additional_info->getErrorNo();
+			if($book_additional_info_error_no != _ERROR_NO_ERROR) return $book_additional_info_error_no;
+
+			/* Checking for book resources */
+			if(!($book_resources instanceof BookResources)) return _ERROR_INCORRECT_PARAMETER_TYPE;
+
+			$book_resources_error_no = $book_resources->getErrorNo();
+			if($book_resources_error_no != _ERROR_NO_ERROR) return $book_resources_error_no;
+			
 			return _ERROR_NO_ERROR;
 		}
 

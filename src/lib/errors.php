@@ -11,6 +11,11 @@
 	define('_ERROR_EMPTY_BOOK_TITLE', 2);
 	define('_ERROR_INVALID_BOOK_FORMAT', 3);
 	define('_ERROR_BOOK_COVER_DOES_NOT_EXISTS', 4);
+	define('_ERROR_MAX_NUMBER_OF_AUTHORS_REACHED', 5);	// That's a WARNING not a proper error
+	define('_ERROR_INCORRECT_PARAMETER_TYPE', 6);
+	define('_ERROR_MAX_NUMBER_OF_CONTRIBUTORS_REACHED', 7);	// That's a WARNING not a proper error
+	define('_ERROR_TEST_ERROR_NUMBER_DIFFERENT_FROM_WHAT_EXPECTED', 8);
+	define('_ERROR_MAX_NUMBER_OF_ADDITIONAL_INFO_REACHED', 9);	// That's a WARNING not a proper error
 
 	/**
 	 *
@@ -19,11 +24,46 @@
 	 *
 	 */
 	
-	define('_ERRORS_TEXTS', array(["No error occurred","No error occurred."],
-		["Assuming that an error occurred","I'm assuming that an error occurred but no errors really occurred yet.\nThat is a safe check meaned to be a remind that there is always an error in the code and to avoid security falls or malfunctions we need to prevent to execute undesired parts of code."],
-		["Empty book title", "During the loading of books a book with an empty title was found."],
-		["Invalid book format", "The software found a book download url which links to an undefined book format. Supported book formats are the following: ".implode(_BOOK_FILE_FORMATS_SUPPORTED)],
-		["Book cover does not exist on disk", "The book cover defined does not exists on disk (in future it will be possibile to retrive images from the internet and this error message will be fixed)"],
+	define('_ERRORS_TEXTS', array([
+									"No error occurred",
+	 								"No error occurred."
+	 							],
+								[
+									"Assuming that an error occurred",
+		 							"I'm assuming that an error occurred but no errors really occurred yet.\nThat is a safe check meaned to be a remind that there is always an error in the code and to avoid security falls or malfunctions we need to prevent to execute undesired parts of code."
+		 						],
+								[
+									"Empty book title",
+		 							"During the loading of books a book with an empty title was found."
+		 						],
+								[
+									"Invalid book format",
+		 							"The software found a book download url which links to an undefined book format. Supported book formats are the following: ".implode(_BOOK_FILE_FORMATS_SUPPORTED)
+		 						],
+								[
+									"Book cover does not exist on disk",
+		 							"The book cover defined does not exists on disk (in future it will be possibile to retrive images from the internet and this error message will be fixed)"
+		 						],
+								[
+									"Maximum number of authors for a book reached",
+		 							"Too much authors for the book were specified so an error is raised. A book can have a max number of authors of "._BOOK_AUTHORS_MAX_NUMBER_ACCEPTED.". That is made to avoid eating all memory when we have a lot of books with a lot of authors. This is treated as a warning and not an error. A number of 20 authors is loaded, all the others are rejected"
+		 						],
+		 						[
+									"Incorrect parameter type",
+		 							"That's a code level error. A parameter with a wrong type was passed to a method or a function. See the error you get in log for more details."
+		 						],
+								[
+									"Maximum number of contributors for a book reached",
+		 							"Too much contributors for the book were specified so an error is raised. A book can have a max number of contributors of "._BOOK_CONTRIBUTORS_MAX_NUMBER_ACCEPTED.". That is made to avoid eating all memory when we have a lot of books with a lot of contributors. This is treated as a warning and not an error. A number of 1000 contributors is loaded, all the others are rejected"
+		 						],
+								[
+									"The test error number is different from what the test was expecting",
+		 							"The test returned an error code different from what the test was expecting."
+		 						],
+								[
+									"Maximum number of additional info for a book reached",
+		 							"Too much additional info for the book were specified so an error is raised. A book can have a max number of additional info of "._BOOK_ADDITIONAL_INFO_MAX_NUMBER_ACCEPTED.". That is made to avoid eating all memory when we have a lot of books with a lot of additional info. This is treated as a warning and not an error. A number of 1000 additional info is loaded, all the others are rejected"
+		 						],
 		));
 
 	/**

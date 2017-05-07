@@ -27,6 +27,7 @@
 		}else{
 			if((($log_level == _LOG_LEVEL_DEBUG) && _DEBUG) || ($log_level != _LOG_LEVEL_DEBUG)){
 				$log_message = _ERROR_TYPES[$log_level]."|".$message."\n";
+				
 				error_log($log_message, 3, _MY_BOOKSHELF_LOG_FILE);
 
 				if($output_buffer)	print_r($log_message);

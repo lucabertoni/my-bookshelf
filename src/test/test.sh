@@ -13,11 +13,9 @@ number_of_tests=$( ls *_test.php | wc -l)
 number_of_executed_tests=0
 
 for test_file in $( ls *_test.php ); do
-	number_of_executed_tests=$((number_of_executed_tests+1))
+	number_of_test=$((number_of_executed_tests+1))
 
-    printf "Running test "\'$test_file\'" ($number_of_executed_tests/$number_of_tests)\n\n"
-	
-	number_of_executed_tests=$((number_of_executed_tests-1))
+    printf "\nRunning test "\'$test_file\'" ($number_of_test/$number_of_tests)\n"
 
     php $test_file
 
@@ -28,6 +26,7 @@ for test_file in $( ls *_test.php ); do
     fi
     
 	number_of_executed_tests=$((number_of_executed_tests+1))
+    
 done
 
-printf "I'm done.\nTotal number of tests: $number_of_tests\nNumber of succesfully executed tests: $number_of_executed_tests\n"
+printf "I'm done.\nTotal number of tests: $number_of_tests\nNumber of successfully executed tests: $number_of_executed_tests\n"

@@ -41,5 +41,9 @@ A book can have a max number of additional info of 50.
 That is made to avoid eating all memory when we have a lot of books with a lot of additional info.  
 This is treated as a warning and not an error. A number of 1000 additional info is loaded, all the others are rejected.
 
+### Error code #10 - Invalid book length
+An invalid book length was specified.  
+Check your BOOK_INFO.txt file.
+
 ## TODO
 - Give the possibility to retrive book cover images from the internet

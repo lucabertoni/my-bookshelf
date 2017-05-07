@@ -16,6 +16,20 @@
 	*/
 	class BookCategory
 	{
+		$this->error_no = 0;
+		$this->subcategories = array();
+
+		$this->category_name = "";
+
+		$this->number_of_books = 0;
+		$this->setNumberOfBooks(0);
+
+		$this->number_of_subcategories = 0;
+		$this->subcategories = array();
+
+		$this->fs_path = ""; // path on the filesystem of the category
+		$this->setParentCategory($parent_category);
+
 		/**
 		 *
 		 * category_name			->			string, name of the category
@@ -25,26 +39,7 @@
 		 */
 		function __construct($category_name, $fs_path, $parent_category)
 		{
-			/**
-			
-				TODO:
-				- Implement error handling
-			 */
-			
-			$this->error_no = 0;
-			$this->subcategories = array();
-
-			$this->category_name = "";
 			$this->setCategoryName($category_name);
-
-			$this->number_of_books = 0;
-			$this->setNumberOfBooks(0);
-
-			$this->number_of_subcategories = 0;
-			$this->subcategories = array();
-
-			$this->fs_path = ""; // path on the filesystem of the category
-			$this->setParentCategory($parent_category);
 		}
 
 		/**

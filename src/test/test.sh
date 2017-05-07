@@ -5,8 +5,8 @@ github_repo_url="https://github.com/lucabertoni/my-bookshelf"
 
 clear
 
-printf "! my-bookshelf Test script !"
-printf "\- Starting tests\nLogs can be found in $log_file_path. Please check that the user who is executing this tests has read/write permissions on that file.\n"
+printf "! my-bookshelf Test script !\n"
+printf "Starting tests\nLogs can be found in $log_file_path. Please check that the user who is executing this tests has read/write permissions on that file.\n"
 
 number_of_tests=$( ls *_test.php | wc -l)
 

@@ -16,6 +16,7 @@
 	define('_ERROR_MAX_NUMBER_OF_CONTRIBUTORS_REACHED', 7);	// That's a WARNING not a proper error
 	define('_ERROR_TEST_ERROR_NUMBER_DIFFERENT_FROM_WHAT_EXPECTED', 8);
 	define('_ERROR_MAX_NUMBER_OF_ADDITIONAL_INFO_REACHED', 9);	// That's a WARNING not a proper error
+	define('_ERROR_INVALID_BOOK_LENGTH', 10);
 
 	/**
 	 *
@@ -38,7 +39,7 @@
 		 						],
 								[
 									"Invalid book format",
-		 							"The software found a book download url which links to an undefined book format. Supported book formats are the following: ".implode(_BOOK_FILE_FORMATS_SUPPORTED)
+		 							"The software found a book download url which links to an undefined book format. Supported book formats are the following: ".implode(", ",_BOOK_FILE_FORMATS_SUPPORTED)
 		 						],
 								[
 									"Book cover does not exist on disk",
@@ -63,6 +64,10 @@
 								[
 									"Maximum number of additional info for a book reached",
 		 							"Too much additional info for the book were specified so an error is raised. A book can have a max number of additional info of "._BOOK_ADDITIONAL_INFO_MAX_NUMBER_ACCEPTED.". That is made to avoid eating all memory when we have a lot of books with a lot of additional info. This is treated as a warning and not an error. A number of 1000 additional info is loaded, all the others are rejected"
+		 						],
+								[
+									"Invalid book length",
+		 							"An invalid book length was specified. Check your BOOK_INFO.txt file"
 		 						],
 		));
 

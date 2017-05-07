@@ -48,7 +48,7 @@
 				for ($i=0; $i < $end; $i+=2) { 
 					if(!($this->addResource($resources[$i],$resources[$i + 1]))){
 						if($this->error_no == _ERROR_INVALID_BOOK_FORMAT){
-							MB_LOG(_LOG_LEVEL_ERROR, "BookResources -> addResources -> Invalid book format ".$resources[$i], true);
+							MB_LOG(_LOG_LEVEL_ERROR, "BookResources -> addResources -> Error no. "._ERROR_INVALID_BOOK_FORMAT.": ".error_code_to_error_string(_ERROR_INVALID_BOOK_FORMAT).". Book format specified: ".$resources[$i].". More at: ".error_code_to_github_url(_ERROR_INVALID_BOOK_FORMAT), true);
 						}
 
 						break;

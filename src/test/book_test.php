@@ -47,7 +47,8 @@
 													new BookContributors("Contributor 1","Contributor 2"),
 													new BookAdditionalInfo("amazon_book_link", "www.test.etc"),
 													"Book notes",
-													new BookResources("PDF", "lol.pdf")
+													new BookResources("PDF", "lol.pdf"),
+													10
 												]
 					],
 					[
@@ -64,7 +65,8 @@
 													new BookContributors("Contributor 1","Contributor 2"),
 													new BookAdditionalInfo("amazon_book_link", "www.test.etc"),
 													"Book notes",
-													new BookResources("PDF", "lol.pdf")
+													new BookResources("PDF", "lol.pdf"),
+													10
 												]
 					],
 					[
@@ -86,7 +88,8 @@
 													new BookContributors("Contributor 1","Contributor 2"),
 													new BookAdditionalInfo("amazon_book_link", "www.test.etc"),
 													"Book notes",
-													new BookResources("PDF", "lol.pdf")
+													new BookResources("PDF", "lol.pdf"),
+													10
 												]
 					],
 					[
@@ -108,7 +111,8 @@
 													new BookContributors("Contributor 1","Contributor 2"),
 													new BookAdditionalInfo("amazon_book_link", "www.test.etc"),
 													"Book notes",
-													new BookResources("PDF", "lol.pdf")
+													new BookResources("PDF", "lol.pdf"),
+													10
 												]
 					],
 					[
@@ -125,7 +129,26 @@
 													new BookContributors(...$book_contributor_test_array),
 													new BookAdditionalInfo("amazon_book_link", "www.test.etc"),
 													"Book notes",
-													new BookResources("PDF", "lol.pdf")
+													new BookResources("PDF", "lol.pdf"),
+													10
+												]
+					],
+					[
+					'test_description' => 'Basic Book class object creation; Invalid book length',
+					'expected_return_code' => _ERROR_INVALID_BOOK_LENGTH,
+					"book_object_parameters" => [
+													"Test book",
+													"Test book subt",
+													new BookAuthors("Author1", "Author2"),
+													"Journals",
+													"123456A234B234",
+													"resources/book_cover.png",
+													"Description of the book",
+													new BookContributors("Contributor 1","Contributor 2"),
+													new BookAdditionalInfo("amazon_book_link", "www.test.etc"),
+													"Book notes",
+													new BookResources("PDF", "lol.pdf"),
+													0
 												]
 					],
 				);

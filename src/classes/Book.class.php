@@ -42,6 +42,7 @@
 		public $book_additional_info = NULL;
 		public $book_notes = "";
 		public $book_resources = NULL;
+		public $book_length = 0;
 
 		private $error_no = _ERROR_NO_ERROR;
 
@@ -63,9 +64,9 @@
 		 											already been written down. For additional book info use book_additional_info above
 		 * book_resources		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
 		 */
-		function __construct($book_title, $book_subtitle, $book_authors, $book_genre, $book_code, $book_cover_path, $book_description, $book_contributors, $book_additional_info, $book_notes, $book_resources)
+		function __construct($book_title, $book_subtitle, $book_authors, $book_genre, $book_code, $book_cover_path, $book_description, $book_contributors, $book_additional_info, $book_notes, $book_resources, $book_length)
 		{
-			$error_code = $this->check_book_info($book_title, $book_resources, $book_cover_path, $book_authors,$book_contributors,$book_additional_info);
+			$error_code = $this->check_book_info($book_title, $book_resources, $book_cover_path, $book_authors, $book_contributors, $book_additional_info, $book_length);
 
 			if(($error_code != _ERROR_NO_ERROR)){
 				$this->error_no = $error_code;
@@ -85,6 +86,7 @@
 			$this->book_contributors = $book_contributors;
 			$this->book_additional_info = $book_additional_info;
 			$this->book_notes = trim($book_notes);
+			$this->book_length = $book_length;
 		}
 
 		/**
@@ -96,7 +98,7 @@
 		 * book_resources		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
 		 * Return					->				int, > 0 = An error occurred | <= 0 = No error occurred
 		 */
-		public static function check_book_info($book_title, $book_resources, $book_cover_path, $book_authors, $book_contributors,$book_additional_info)
+		public static function check_book_info($book_title, $book_resources, $book_cover_path, $book_authors, $book_contributors,$book_additional_info,$book_length)
 		{
 			if (empty($book_title)) return _ERROR_EMPTY_BOOK_TITLE;
 
@@ -134,6 +136,8 @@
 
 			$book_resources_error_no = $book_resources->getErrorNo();
 			if($book_resources_error_no != _ERROR_NO_ERROR) return $book_resources_error_no;
+
+			if($book_length <= 0) return _ERROR_INVALID_BOOK_LENGTH;
 			
 			return _ERROR_NO_ERROR;
 		}

@@ -1,5 +1,7 @@
 <?php
-	define("_MAX_BOOKS_NUMBER_FOR_EACH_CATEGORY", 1000);
+	require_once 'lib/errrors.php';
+	require_once 'lib/defs.php';
+
 
 	/**
 	* This defines the structure of a bookshelf category.
@@ -16,116 +18,98 @@
 	*/
 	class BookCategory
 	{
-		$this->error_no = 0;
-		$this->subcategories = array();
-
-		$this->category_name = "";
-
-		$this->number_of_books = 0;
-		$this->setNumberOfBooks(0);
-
-		$this->number_of_subcategories = 0;
-		$this->subcategories = array();
-
-		$this->fs_path = ""; // path on the filesystem of the category
-		$this->setParentCategory($parent_category);
+		private $error_no = 0;
+		public $category_name = "";
+		public $category_fs_path = "";
+		public $category_parent_category_object = NULL;
+		private $subcategories = array();
 
 		/**
 		 *
-		 * category_name			->			string, name of the category
-		 * $fs_path					->			string, path of the directory which identifies the category on the filesytem
-		 * parent_category			->			BookCategory object, parent category reference
+		 * Initializes category details
+		 * $category_name							->				string, name of the category
+		 * $category_fs_path						->				string, path of the category on the filesystem
+		 * $category_parent_category_object			->				BookCategory, object of the parent category, NULL if no parent
 		 *
 		 */
-		function __construct($category_name, $fs_path, $parent_category)
+		
+		function __construct($category_name, $category_fs_path, $category_parent_category_object)
 		{
-			$this->setCategoryName($category_name);
+				if(($rc = $this->checkBookCategoryInfo($category_name, $category_fs_path, $category_parent_category_object) != _ERROR_NO_ERROR)){
+
+					$this->error_no = $rc;
+
+					return;
+				}
+
+				$this->category_name = trim($category_name);
+				$this->category_fs_path = sanitize_directory_path($category_fs_path);
+				$this->category_parent_category_object = $category_parent_category_object;
 		}
+
+		private function checkBookCategoryInfo($category_name, $category_fs_path, $category_parent_category_object)
+		{
+			if(empty(trim($category_name)))	return _ERROR_EMPTY_BOOK_CATEGORY;
+
+			if(empty(trim($category_fs_path))) return _ERROR_EMPTY_BOOK_CATEGORY_FS_PATH;
+			if(getDirectoryContent($category_fs_path) == false) return _ERROR_CATEGORY_DIRECTORY_IS_NOT_A_DIRECTORY;
+
+			/* Checking parent category object */
+			if(!($category_parent_category_object instanceof BookCategory)) return _ERROR_INCORRECT_PARAMETER_TYPE;
+
+			$parent_book_category_object_error_no = $category_parent_category_object->getErrorNo();
+			if($parent_book_category_object_error_no != _ERROR_NO_ERROR) return $parent_book_category_object_error_no;
+
+			return _ERROR_NO_ERROR;
+		}
+
 
 		/**
 		 *
-		 * Sets the category name
-		 * Returns				:				Boolean, true = Name setted | false = error occure while setting the category name
+		 * Load subcategories recursively for a max depth level of max_depth_level
 		 *
+		 * max_depth_level					->					int, max depth level, counting from 0 (i.e. 0 is the first level of subcategories). If -1 is define a max level of _MAX_CATEGORY_DEPTH_LEVEL is assumed. If a value gt _MAX_CATEGORY_DEPTH_LEVEL is passed, _MAX_CATEGORY_DEPTH_LEVEL is assumed
 		 */
-		private function setCategoryName($category_name)
-		{
-			$category_tmp = trim($category_name);
-			$category_tmp = strip_tags(str_replace("_", " ", $category_tmp));
+		public function loadSubCategoriesFromDisk($max_depth_level = -1){
+			$category_obj = $this;
 
-			$empty_category_name = empty($category_tmp);
+			$loading_level = 0;
 
-			$this->category_name = "";
-			if (!($empty_category_name)){
-				$this->category_name = $category_tmp;
+			$max_depth_level = (($max_depth_level <= _MAX_CATEGORY_DEPTH_LEVEL) && ($max_depth_level >= 0)) ? $max_depth_level : _MAX_CATEGORY_DEPTH_LEVEL;
+
+			if($dir_content = getDirectoryContent($category_obj->category_fs_path)){
+				foreach ($dir_content as $key => $dir) {
+					$sub_dir_content = getDirectoryContent($dir);
+
+					$dir_is_a_directory = $sub_dir_content !== false;
+
+					if($dir_is_a_directory){
+						$dir_sanitized = replace_chr(array("_", "/", "<", ">", ".", ","));
+
+						$subcategory_path = $category_obj->category_fs_path."/".$dir;
+
+						$sub_category_object = new BookCategory($dir_sanitized, $subcategory_path, $category_obj);
+
+						$rc = $sub_category_object->getErrorNo();
+
+						if($rc != _ERROR_NO_ERROR){
+							$this->error_no = $rc;
+
+							MB_LOG(_LOG_LEVEL_ERROR,"Error occurred while loading subcategory '".$dir_sanitized."' with path '".$subcategory_path."'", false);
+
+							break;
+						}
+
+						$sub_category_object->loadSubCategoriesFromDisk(($max_depth_level - 1));
+
+						array_push($category_obj->subcategories, $sub_category_object);
+					}
+				}
 			}
-
-			return !(empty($category_tmp));
 		}
 
-		/**
-		 *
-		 * Sets the number of books in the category
-		 * Returns				:				Boolean, true = setted | false = error occure while setting it
-		 *
-		 */
-		private function setNumberOfBooks($number_of_books)
+		public function getErrorNo()
 		{
-			$number_of_books_correct = $number_of_books >= 0 and $number_of_books <= _MAX_BOOKS_NUMBER_FOR_EACH_CATEGORY;
-			$this->number_of_books = 0;
-			if ($number_of_books_correct){
-				$this->number_of_books = $number_of_books;
-			}
-
-			return $number_of_books_correct;
-		}
-
-		/**
-		 *
-		 * Sets the fs path of the category
-		 * Returns				:				Boolean, true = setted | false = error occure while setting it
-		 *
-		 */
-		private function setFSPath($fs_path)
-		{
-			$fs_path_tmp = trim($fs_path);
-			$fs_path_tmp = strip_tags(str_replace("_", " ", $fs_path_tmp));
-
-			$empty_fs_path = empty($fs_path_tmp);
-
-			$this->fs_path = "";
-			if (!($empty_fs_path)){
-				$this->fs_path = $fs_path_tmp;
-			}
-
-			return !(empty($fs_path_tmp));
-		}
-
-		/**
-		 *
-		 * Sets the parent category reference
-		 * Returns				:				Boolean, true = setted | false = error occure while setting it
-		 *
-		 */
-		private function setParentCategory($parent_category)
-		{
-			//$this->$parent_category = NULL;
-			if (is_null($parent_category) || $parent_category instanceof BookCategory){
-				$this->parent_category = $parent_category;
-			}
-
-			return !(is_null($this->$parent_category));
-		}
-
-		public function addSubCategory($subcategory)
-		{
-			$subcategory_is_correct = ($subcategory instanceof BookCategory);
-			if ($subcategory_is_correct){
-				$this->subcategories = $parent_category;
-				array_push($this->subcategories, $subcategory);
-				$this->number_of_subcategories += 1;
-			}
-
-			return !(is_null($this->$parent_category));
+			return $this->error_no;
 		}
 	}

@@ -58,11 +58,11 @@
 		 * book_cover_path			->				string, path on the filesystem of the book cover path.
 		 * book_description			->				string, description of the book
 		 * book_contributors		->				BookContributors object, list of book contributors except its authors
-		 * book_additional_info		->				assocarray, list of additional book info, like:
-		 												["amazon_link"] => "www.amazon.etcetc"
+		 * book_additional_info		->				BookAdditionalInfo object, list of additional book info, like:
+		 												"amazon_link" => "www.amazon.etcetc"
 		 * book_notes				->				string, notes about the book, they could be anything else that is not 
 		 											already been written down. For additional book info use book_additional_info above
-		 * book_resources		->				assocarray, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
+		 * book_resources			->				BookResources, list of book urls from where to download the book in different 												formats. For allowed formats see: _BOOK_FILE_FORMATS_SUPPORTED in lib/defs.php
 		 */
 		function __construct($book_title, $book_subtitle, $book_authors, $book_genre, $book_code, $book_cover_path, $book_description, $book_contributors, $book_additional_info, $book_notes, $book_resources, $book_length)
 		{

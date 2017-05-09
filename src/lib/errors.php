@@ -17,6 +17,9 @@
 	define('_ERROR_TEST_ERROR_NUMBER_DIFFERENT_FROM_WHAT_EXPECTED', 8);
 	define('_ERROR_MAX_NUMBER_OF_ADDITIONAL_INFO_REACHED', 9);	// That's a WARNING not a proper error
 	define('_ERROR_INVALID_BOOK_LENGTH', 10);
+	define('_ERROR_EMPTY_BOOK_CATEGORY', 11);
+	define('_ERROR_EMPTY_BOOK_CATEGORY_FS_PATH', 12);
+	define('_ERROR_CATEGORY_DIRECTORY_IS_NOT_A_DIRECTORY', 13);
 
 	/**
 	 *
@@ -68,6 +71,18 @@
 								[
 									"Invalid book length",
 		 							"An invalid book length was specified. Check your BOOK_INFO.txt file"
+		 						],
+								[
+									"Empty book category name",
+		 							"An empty value was passed to define a category which contains books"
+		 						],
+								[
+									"Empty book category fs path",
+		 							"An empty value was passed to define the path of the category on the filesystem"
+		 						],
+								[
+									"Category directory is not a directory",
+		 							"The category path passed to the category class is not a directory"
 		 						],
 		));
 

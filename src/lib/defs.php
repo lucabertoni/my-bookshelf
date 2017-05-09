@@ -15,3 +15,5 @@
 	define('_BOOK_CONTRIBUTORS_MAX_NUMBER_ACCEPTED', 1000);	// Max number of contributors acceptet in a book. If more are provided are lost
 
 	define('_BOOK_ADDITIONAL_INFO_MAX_NUMBER_ACCEPTED', 50);	// Max number of contributors acceptet in a book. If more are provided are lost
+
+	define('_MAX_CATEGORY_DEPTH_LEVEL', 10);
